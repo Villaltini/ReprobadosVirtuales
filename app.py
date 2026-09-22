@@ -9,7 +9,7 @@ st.set_page_config(page_title="Filtro de Notas UGB", page_icon="📚", layout="c
 
 st.title("🎓 Lector y Filtro de Colector UGB")
 st.write("Arrastra o selecciona tu archivo PDF de notas para extraer automáticamente la información y filtrar las notas de **5.0 a 5.9**.")
-st.title("🎓 Educación Virtual")
+st.write("🎓 Educación Virtual")
 
 
 # Componente para arrastrar y soltar el PDF
