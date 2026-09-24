@@ -4,7 +4,6 @@ import pandas as pd
 from pypdf import PdfReader
 import io
 import html
-import textwrap
 
 
 # ============================================================
@@ -565,7 +564,7 @@ header {
 # ENCABEZADO
 # ============================================================
 
-st.markdown("""
+st.html("""
 <div class="main-title">
     🎓 Lector y Filtro de Colector UGB
 </div>
@@ -578,7 +577,7 @@ st.markdown("""
 <div class="brand">
     🎓 EDUCACIÓN VIRTUAL · UGB
 </div>
-""", unsafe_allow_html=True)
+""")
 
 
 # ============================================================
@@ -1093,14 +1092,10 @@ if archivo_pdf is not None:
 
 
             # =====================================================
-            # CORRECCIÓN:
-            # ELIMINAR INDENTACIÓN ANTES DE RENDERIZAR HTML
+            # RENDERIZAR HTML DIRECTAMENTE
             # =====================================================
 
-            st.markdown(
-                textwrap.dedent(cards_html),
-                unsafe_allow_html=True
-            )
+            st.html(cards_html)
 
 
             # =====================================================
@@ -1130,19 +1125,16 @@ if archivo_pdf is not None:
                     )
 
 
-                st.markdown(
-                    textwrap.dedent(
-                        f"""
-                        <div style="
-                            text-align:center;
-                            margin:10px 0 25px 0;
-                            color:#6b7280;
-                        ">
-                            {info}
-                        </div>
-                        """
-                    ),
-                    unsafe_allow_html=True
+                st.html(
+                    f"""
+                    <div style="
+                        text-align:center;
+                        margin:10px 0 25px 0;
+                        color:#6b7280;
+                    ">
+                        {info}
+                    </div>
+                    """
                 )
 
 
@@ -1150,36 +1142,28 @@ if archivo_pdf is not None:
             # TITULO
             # =====================================================
 
-            st.markdown(
-                textwrap.dedent(
-                    """
-                    <div class="results-title">
-                        📋 Estudiantes encontrados
-                    </div>
-                    """
-                ),
-                unsafe_allow_html=True
-            )
+            st.html("""
+                <div class="results-title">
+                    📋 Estudiantes encontrados
+                </div>
+            """)
 
 
             # =====================================================
             # SUBTITULO
             # =====================================================
 
-            st.markdown(
-                textwrap.dedent(
-                    f"""
-                    <div class="results-subtitle">
-                        Se encontraron
-                        <strong>{cantidad}</strong>
-                        estudiantes con notas entre
-                        <strong>5.0</strong>
-                        y
-                        <strong>5.9</strong>.
-                    </div>
-                    """
-                ),
-                unsafe_allow_html=True
+            st.html(
+                f"""
+                <div class="results-subtitle">
+                    Se encontraron
+                    <strong>{cantidad}</strong>
+                    estudiantes con notas entre
+                    <strong>5.0</strong>
+                    y
+                    <strong>5.9</strong>.
+                </div>
+                """
             )
 
 
@@ -1253,30 +1237,21 @@ if archivo_pdf is not None:
 
 
             # =====================================================
-            # CORRECCIÓN:
-            # ELIMINAR INDENTACIÓN ANTES DE RENDERIZAR
+            # RENDERIZAR TARJETAS DIRECTAMENTE
             # =====================================================
 
-            st.markdown(
-                textwrap.dedent(students_html),
-                unsafe_allow_html=True
-            )
+            st.html(students_html)
 
 
             # =====================================================
             # TABLA
             # =====================================================
 
-            st.markdown(
-                textwrap.dedent(
-                    """
-                    <div class="results-title">
-                        📊 Tabla detallada
-                    </div>
-                    """
-                ),
-                unsafe_allow_html=True
-            )
+            st.html("""
+                <div class="results-title">
+                    📊 Tabla detallada
+                </div>
+            """)
 
 
             st.dataframe(
