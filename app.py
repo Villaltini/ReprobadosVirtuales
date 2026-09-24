@@ -4,10 +4,11 @@ import pandas as pd
 from pypdf import PdfReader
 import io
 import html
+import textwrap
 
 
 # ============================================================
-# CONFIGURACIÓN DE LA PÁGINA
+# CONFIGURACIÓN
 # ============================================================
 
 st.set_page_config(
@@ -19,15 +20,11 @@ st.set_page_config(
 
 
 # ============================================================
-# CSS - DISEÑO PREMIUM
+# CSS
 # ============================================================
 
-st.markdown("""
+css = """
 <style>
-
-/* ============================================================
-   FONDO GENERAL
-   ============================================================ */
 
 .stApp {
     background:
@@ -44,18 +41,14 @@ st.markdown("""
         #f6f7fb;
 }
 
-
-/* Ocultar menú */
 #MainMenu {
     visibility: hidden;
 }
 
-/* Ocultar footer */
 footer {
     visibility: hidden;
 }
 
-/* Ocultar header */
 header {
     visibility: hidden;
 }
@@ -67,13 +60,9 @@ header {
 
 .main-title {
     text-align: center;
-
     font-size: 42px;
-
     font-weight: 800;
-
     margin-top: 20px;
-
     margin-bottom: 5px;
 
     background:
@@ -85,44 +74,32 @@ header {
         );
 
     -webkit-background-clip: text;
-
     -webkit-text-fill-color: transparent;
 }
 
-
 .subtitle {
     text-align: center;
-
     color: #6b7280;
-
     font-size: 16px;
-
     margin-bottom: 15px;
 }
 
-
 .brand {
     text-align: center;
-
     font-size: 14px;
-
     font-weight: 700;
-
     color: #7c3aed;
-
     margin-bottom: 30px;
 }
 
 
 /* ============================================================
-   TARJETA DE CARGA
+   AREA DE CARGA
    ============================================================ */
 
 .upload-card {
     max-width: 850px;
-
     margin: 0 auto 20px auto;
-
     padding: 28px;
 
     border-radius: 24px;
@@ -137,29 +114,20 @@ header {
         0 20px 50px rgba(31,41,55,0.08),
         0 5px 15px rgba(31,41,55,0.05);
 
-    backdrop-filter:
-        blur(15px);
+    backdrop-filter: blur(15px);
 }
-
 
 .upload-title {
     text-align: center;
-
     color: #374151;
-
     font-size: 20px;
-
     font-weight: 700;
-
     margin-bottom: 5px;
 }
 
-
 .upload-text {
     text-align: center;
-
     color: #6b7280;
-
     font-size: 14px;
 }
 
@@ -169,7 +137,6 @@ header {
    ============================================================ */
 
 [data-testid="stFileUploader"] {
-
     background:
         rgba(255,255,255,0.75);
 
@@ -184,9 +151,7 @@ header {
         all .3s ease;
 }
 
-
 [data-testid="stFileUploader"]:hover {
-
     border-color: #6d28d9;
 
     box-shadow:
@@ -195,7 +160,7 @@ header {
 
 
 /* ============================================================
-   CONTENEDOR DE CARDS
+   CARDS
    ============================================================ */
 
 .cards-container {
@@ -276,7 +241,7 @@ header {
 
 
 /* ============================================================
-   BRILLO SUPERIOR
+   BRILLO
    ============================================================ */
 
 .premium-card::before {
@@ -286,11 +251,9 @@ header {
     position: absolute;
 
     width: 180px;
-
     height: 180px;
 
     top: -90px;
-
     right: -60px;
 
     border-radius: 50%;
@@ -305,10 +268,6 @@ header {
 }
 
 
-/* ============================================================
-   BRILLO INFERIOR
-   ============================================================ */
-
 .premium-card::after {
 
     content: "";
@@ -316,11 +275,9 @@ header {
     position: absolute;
 
     width: 140px;
-
     height: 140px;
 
     bottom: -80px;
-
     left: -60px;
 
     border-radius: 50%;
@@ -342,7 +299,6 @@ header {
 .card-icon {
 
     width: 45px;
-
     height: 45px;
 
     border-radius: 12px;
@@ -353,7 +309,6 @@ header {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size: 22px;
@@ -378,11 +333,9 @@ header {
     position: absolute;
 
     top: 18px;
-
     right: 18px;
 
     width: 38px;
-
     height: 38px;
 
     border-radius: 50%;
@@ -393,7 +346,6 @@ header {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size: 12px;
@@ -428,7 +380,7 @@ header {
 
 
 /* ============================================================
-   TITULO DE CARD
+   TITULO CARD
    ============================================================ */
 
 .card-title {
@@ -461,8 +413,7 @@ header {
 
     border-radius: 10px;
 
-    background:
-        white;
+    background: white;
 
     margin-bottom: 12px;
 
@@ -473,7 +424,7 @@ header {
 
 
 /* ============================================================
-   DESCRIPCIÓN
+   DESCRIPCION
    ============================================================ */
 
 .card-description {
@@ -491,7 +442,7 @@ header {
 
 
 /* ============================================================
-   TITULO RESULTADOS
+   RESULTADOS
    ============================================================ */
 
 .results-title {
@@ -506,7 +457,6 @@ header {
 
     margin-bottom: 5px;
 }
-
 
 .results-subtitle {
 
@@ -579,50 +529,39 @@ header {
 
 
 /* ============================================================
-   ALERTAS
-   ============================================================ */
-
-div[data-testid="stAlert"] {
-
-    border-radius: 14px;
-}
-
-
-/* ============================================================
    RESPONSIVE
    ============================================================ */
 
 @media (max-width: 1100px) {
 
     .cards-container {
-
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
     }
+
 }
 
 
 @media (max-width: 700px) {
 
     .main-title {
-
         font-size: 30px;
     }
 
     .cards-container {
-
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
     }
 
     .premium-card {
-
         min-height: 200px;
     }
+
 }
 
 </style>
-""", unsafe_allow_html=True)
+"""
+
+st.markdown(css, unsafe_allow_html=True)
 
 
 # ============================================================
@@ -631,41 +570,41 @@ div[data-testid="stAlert"] {
 
 st.markdown(
     """
-    <div class="main-title">
-        🎓 Lector y Filtro de Colector UGB
-    </div>
+<div class="main-title">
+🎓 Lector y Filtro de Colector UGB
+</div>
 
-    <div class="subtitle">
-        Carga tu colector de notas en PDF y obtén automáticamente
-        los estudiantes que se encuentran entre 5.0 y 5.9.
-    </div>
+<div class="subtitle">
+Carga tu colector de notas en PDF y obtén automáticamente
+los estudiantes que se encuentran entre 5.0 y 5.9.
+</div>
 
-    <div class="brand">
-        🎓 EDUCACIÓN VIRTUAL · UGB
-    </div>
-    """,
+<div class="brand">
+🎓 EDUCACIÓN VIRTUAL · UGB
+</div>
+""",
     unsafe_allow_html=True
 )
 
 
 # ============================================================
-# AREA DE CARGA
+# CARGA
 # ============================================================
 
 st.markdown(
     """
-    <div class="upload-card">
+<div class="upload-card">
 
-        <div class="upload-title">
-            📄 Cargar colector de notas
-        </div>
+<div class="upload-title">
+📄 Cargar colector de notas
+</div>
 
-        <div class="upload-text">
-            Arrastra tu archivo PDF o selecciónalo desde tu computadora.
-        </div>
+<div class="upload-text">
+Arrastra tu archivo PDF o selecciónalo desde tu computadora.
+</div>
 
-    </div>
-    """,
+</div>
+""",
     unsafe_allow_html=True
 )
 
@@ -678,31 +617,24 @@ archivo_pdf = st.file_uploader(
 
 
 # ============================================================
-# PROCESAMIENTO DEL PDF
+# PROCESAR PDF
 # ============================================================
 
 if archivo_pdf is not None:
 
     try:
 
-        # ----------------------------------------------------
-        # LEER PDF
-        # ----------------------------------------------------
-
         lector = PdfReader(archivo_pdf)
 
         materia = "Materia no especificada"
-
         docente = "Docente no especificado"
-
         ciclo = ""
-
         regional = ""
 
 
-        # ----------------------------------------------------
-        # EXTRAER INFORMACIÓN DEL ENCABEZADO
-        # ----------------------------------------------------
+        # ====================================================
+        # EXTRAER ENCABEZADO
+        # ====================================================
 
         for i in range(min(2, len(lector.pages))):
 
@@ -710,7 +642,6 @@ if archivo_pdf is not None:
 
             if not texto:
                 continue
-
 
             for linea in texto.split("\n"):
 
@@ -730,10 +661,7 @@ if archivo_pdf is not None:
 
                     if ":" in linea_limpia:
 
-                        partes = linea_limpia.split(
-                            ":",
-                            1
-                        )
+                        partes = linea_limpia.split(":", 1)
 
                         if (
                             len(partes) > 1
@@ -754,10 +682,7 @@ if archivo_pdf is not None:
 
                     if ":" in linea_limpia:
 
-                        partes = linea_limpia.split(
-                            ":",
-                            1
-                        )
+                        partes = linea_limpia.split(":", 1)
 
                         if (
                             len(partes) > 1
@@ -802,11 +727,8 @@ if archivo_pdf is not None:
 
 
         # ====================================================
-        # LIMPIAR INFORMACIÓN
+        # LIMPIAR MATERIA
         # ====================================================
-
-        # Si la materia contiene información de ciclo,
-        # la separamos.
 
         match_ciclo = re.search(
             r"(.*?)\s+Ciclo\s*:\s*(.+)",
@@ -823,8 +745,9 @@ if archivo_pdf is not None:
                 ciclo = match_ciclo.group(2).strip()
 
 
-        # Si el docente contiene Regional,
-        # lo separamos.
+        # ====================================================
+        # LIMPIAR DOCENTE
+        # ====================================================
 
         match_regional = re.search(
             r"(.*?)\s+Regional\s*:\s*(.+)",
@@ -842,16 +765,13 @@ if archivo_pdf is not None:
 
 
         # ====================================================
-        # EXTRAER ESTUDIANTES
+        # ESTUDIANTES
         # ====================================================
 
         estudiantes = []
 
 
-        for num_pagina, pagina in enumerate(
-            lector.pages,
-            start=1
-        ):
+        for pagina in lector.pages:
 
             texto = pagina.extract_text()
 
@@ -860,10 +780,6 @@ if archivo_pdf is not None:
 
 
             for linea in texto.split("\n"):
-
-                # --------------------------------------------
-                # BUSCAR CARNET
-                # --------------------------------------------
 
                 match_carnet = re.search(
                     r"\b([A-Z]{2,4}\d{6})\b",
@@ -878,10 +794,6 @@ if archivo_pdf is not None:
 
                 carnet = match_carnet.group(1).upper()
 
-
-                # --------------------------------------------
-                # BUSCAR NOTAS
-                # --------------------------------------------
 
                 numeros = re.findall(
                     r"\b(10(?:\.0{1,2})?|[0-9](?:\.\d{1,2})?)\b",
@@ -903,19 +815,14 @@ if archivo_pdf is not None:
                 nota_final = grados[-1]
 
 
-                # --------------------------------------------
-                # FILTRAR 5.0 - 5.9
-                # --------------------------------------------
-
                 if not (
                     5.0 <= nota_final <= 5.9
                 ):
-
                     continue
 
 
                 # --------------------------------------------
-                # EXTRAER NOMBRE
+                # NOMBRE
                 # --------------------------------------------
 
                 nombre_limpio = re.sub(
@@ -925,11 +832,11 @@ if archivo_pdf is not None:
                 )
 
 
-                for g in numeros:
+                for numero in numeros:
 
                     nombre_limpio = (
                         nombre_limpio.replace(
-                            g,
+                            numero,
                             ""
                         )
                     )
@@ -962,10 +869,6 @@ if archivo_pdf is not None:
                 ).strip()
 
 
-                # --------------------------------------------
-                # AGREGAR ESTUDIANTE
-                # --------------------------------------------
-
                 estudiantes.append(
                     {
                         "Materia": materia,
@@ -981,7 +884,7 @@ if archivo_pdf is not None:
 
 
         # ====================================================
-        # CREAR DATAFRAME
+        # DATAFRAME
         # ====================================================
 
         df = pd.DataFrame(estudiantes)
@@ -989,7 +892,6 @@ if archivo_pdf is not None:
 
         if not df.empty:
 
-            # Eliminar duplicados
             df = df.drop_duplicates(
                 subset=["Carnet"]
             )
@@ -999,17 +901,17 @@ if archivo_pdf is not None:
             # ESTADÍSTICAS
             # =================================================
 
+            cantidad = len(df)
+
             promedio = df["Nota Final"].mean()
 
             nota_minima = df["Nota Final"].min()
 
             nota_maxima = df["Nota Final"].max()
 
-            cantidad = len(df)
-
 
             # =================================================
-            # MENSAJE DE ÉXITO
+            # EXITO
             # =================================================
 
             st.success(
@@ -1020,7 +922,7 @@ if archivo_pdf is not None:
 
 
             # =================================================
-            # ESCAPAR TEXTO PARA HTML
+            # PROTEGER TEXTOS
             # =================================================
 
             materia_html = html.escape(
@@ -1033,164 +935,188 @@ if archivo_pdf is not None:
 
 
             # =================================================
-            # PREMIUM CARDS
+            # HTML DE LAS CARDS
+            #
+            # IMPORTANTE:
+            # textwrap.dedent elimina la indentación.
             # =================================================
 
-            st.markdown(
+            cards_html = textwrap.dedent(
                 f"""
                 <div class="cards-container">
 
-                    <div class="premium-card">
+                <div class="premium-card">
 
-                        <div class="card-number">
-                            01
-                        </div>
+                <div class="card-number">
+                01
+                </div>
 
-                        <div class="card-icon">
-                            📚
-                        </div>
+                <div class="card-icon">
+                📚
+                </div>
 
-                        <div class="card-label">
-                            ASIGNATURA
-                        </div>
+                <div class="card-label">
+                ASIGNATURA
+                </div>
 
-                        <div class="card-title">
-                            {materia_html}
-                        </div>
+                <div class="card-title">
+                {materia_html}
+                </div>
 
-                        <div class="card-line"></div>
+                <div class="card-line">
+                </div>
 
-                        <div class="card-description">
-                            Materia encontrada automáticamente
-                            en el colector.
-                        </div>
-
-                    </div>
-
-
-                    <div class="premium-card">
-
-                        <div class="card-number">
-                            02
-                        </div>
-
-                        <div class="card-icon">
-                            👨‍🏫
-                        </div>
-
-                        <div class="card-label">
-                            DOCENTE
-                        </div>
-
-                        <div class="card-title">
-                            {docente_html}
-                        </div>
-
-                        <div class="card-line"></div>
-
-                        <div class="card-description">
-                            Docente identificado desde
-                            el encabezado del PDF.
-                        </div>
-
-                    </div>
-
-
-                    <div class="premium-card">
-
-                        <div class="card-number">
-                            03
-                        </div>
-
-                        <div class="card-icon">
-                            👨‍🎓
-                        </div>
-
-                        <div class="card-label">
-                            ESTUDIANTES
-                        </div>
-
-                        <div class="card-title">
-                            {cantidad}
-                        </div>
-
-                        <div class="card-line"></div>
-
-                        <div class="card-description">
-                            Estudiantes encontrados con
-                            nota entre 5.0 y 5.9.
-                        </div>
-
-                    </div>
-
-
-                    <div class="premium-card">
-
-                        <div class="card-number">
-                            04
-                        </div>
-
-                        <div class="card-icon">
-                            📊
-                        </div>
-
-                        <div class="card-label">
-                            PROMEDIO
-                        </div>
-
-                        <div class="card-title">
-                            {promedio:.2f}
-                        </div>
-
-                        <div class="card-line"></div>
-
-                        <div class="card-description">
-                            Promedio de las notas
-                            encontradas en el rango.
-                        </div>
-
-                    </div>
+                <div class="card-description">
+                Materia encontrada automáticamente
+                en el colector.
+                </div>
 
                 </div>
-                """,
+
+
+                <div class="premium-card">
+
+                <div class="card-number">
+                02
+                </div>
+
+                <div class="card-icon">
+                👨‍🏫
+                </div>
+
+                <div class="card-label">
+                DOCENTE
+                </div>
+
+                <div class="card-title">
+                {docente_html}
+                </div>
+
+                <div class="card-line">
+                </div>
+
+                <div class="card-description">
+                Docente identificado desde
+                el encabezado del PDF.
+                </div>
+
+                </div>
+
+
+                <div class="premium-card">
+
+                <div class="card-number">
+                03
+                </div>
+
+                <div class="card-icon">
+                👨‍🎓
+                </div>
+
+                <div class="card-label">
+                ESTUDIANTES
+                </div>
+
+                <div class="card-title">
+                {cantidad}
+                </div>
+
+                <div class="card-line">
+                </div>
+
+                <div class="card-description">
+                Estudiantes encontrados con
+                nota entre 5.0 y 5.9.
+                </div>
+
+                </div>
+
+
+                <div class="premium-card">
+
+                <div class="card-number">
+                04
+                </div>
+
+                <div class="card-icon">
+                📊
+                </div>
+
+                <div class="card-label">
+                PROMEDIO
+                </div>
+
+                <div class="card-title">
+                {promedio:.2f}
+                </div>
+
+                <div class="card-line">
+                </div>
+
+                <div class="card-description">
+                Promedio de las notas
+                encontradas en el rango.
+                </div>
+
+                </div>
+
+                </div>
+                """
+            )
+
+
+            # =================================================
+            # MOSTRAR CARDS
+            # =================================================
+
+            st.markdown(
+                cards_html,
                 unsafe_allow_html=True
             )
 
 
             # =================================================
-            # INFORMACIÓN ADICIONAL
+            # INFORMACIÓN CICLO / REGIONAL
             # =================================================
 
             if ciclo or regional:
 
-                informacion_extra = ""
+                info_html = "<div style='text-align:center; margin:10px 0 25px 0; color:#6b7280;'>"
 
                 if ciclo:
 
-                    informacion_extra += (
-                        f"📅 **Ciclo:** {ciclo}  "
+                    info_html += (
+                        f"📅 <strong>Ciclo:</strong> "
+                        f"{html.escape(ciclo)}"
                     )
+
+                if ciclo and regional:
+
+                    info_html += " &nbsp; | &nbsp; "
 
                 if regional:
 
-                    informacion_extra += (
-                        f" | 📍 **Regional:** {regional}"
+                    info_html += (
+                        f"📍 <strong>Regional:</strong> "
+                        f"{html.escape(regional)}"
                     )
 
+                info_html += "</div>"
 
                 st.markdown(
-                    informacion_extra
+                    info_html,
+                    unsafe_allow_html=True
                 )
 
 
             # =================================================
-            # TITULO RESULTADOS
+            # RESULTADOS
             # =================================================
 
             st.markdown(
                 """
                 <div class="results-title">
-                    📋 Estudiantes encontrados
+                📋 Estudiantes encontrados
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -1200,10 +1126,10 @@ if archivo_pdf is not None:
             st.markdown(
                 f"""
                 <div class="results-subtitle">
-                    Rango de notas:
-                    <strong>{nota_minima:.1f}</strong>
-                    –
-                    <strong>{nota_maxima:.1f}</strong>
+                Rango de notas:
+                <strong>{nota_minima:.1f}</strong>
+                –
+                <strong>{nota_maxima:.1f}</strong>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -1222,7 +1148,7 @@ if archivo_pdf is not None:
 
 
             # =================================================
-            # GENERAR EXCEL
+            # EXCEL
             # =================================================
 
             output = io.BytesIO()
@@ -1242,10 +1168,6 @@ if archivo_pdf is not None:
             excel_data = output.getvalue()
 
 
-            # =================================================
-            # BOTÓN EXCEL
-            # =================================================
-
             st.markdown(
                 "<br>",
                 unsafe_allow_html=True
@@ -1253,16 +1175,10 @@ if archivo_pdf is not None:
 
 
             st.download_button(
-
                 label="📥 Descargar Reporte Excel",
-
                 data=excel_data,
-
-                file_name=
-                    "reprobados_5.0_a_5.9.xlsx",
-
-                mime=
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                file_name="reprobados_5.0_a_5.9.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
 
