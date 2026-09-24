@@ -703,145 +703,110 @@ if archivo_pdf is not None:
             )
 
 
-            # =================================================
-            # PREMIUM CARDS
-            # =================================================
+           # ============================================================
+# PREMIUM CARDS
+# ============================================================
 
-            promedio = df["Nota Final"].mean()
+promedio = df["Nota Final"].mean()
+nota_minima = df["Nota Final"].min()
+nota_maxima = df["Nota Final"].max()
+cantidad = len(df)
 
-            nota_minima = df["Nota Final"].min()
+st.markdown(
+    f"""
+    <div class="cards-container">
 
-            nota_maxima = df["Nota Final"].max()
+        <div class="premium-card">
+            <div class="card-number">01</div>
 
-            cantidad = len(df)
+            <div class="card-icon">📚</div>
 
-
-            st.markdown(f"""
-
-            <div class="cards-container">
-
-                <!-- CARD MATERIA -->
-
-                <div class="premium-card">
-
-                    <div class="card-number">
-                        01
-                    </div>
-
-                    <div class="card-icon">
-                        📚
-                    </div>
-
-                    <div class="card-label">
-                        ASIGNATURA
-                    </div>
-
-                    <div class="card-title">
-                        {materia}
-                    </div>
-
-                    <div class="card-line"></div>
-
-                    <div class="card-description">
-                        Materia encontrada automáticamente
-                        en el colector.
-                    </div>
-
-                </div>
-
-
-                <!-- CARD DOCENTE -->
-
-                <div class="premium-card">
-
-                    <div class="card-number">
-                        02
-                    </div>
-
-                    <div class="card-icon">
-                        👨‍🏫
-                    </div>
-
-                    <div class="card-label">
-                        DOCENTE
-                    </div>
-
-                    <div class="card-title">
-                        {docente}
-                    </div>
-
-                    <div class="card-line"></div>
-
-                    <div class="card-description">
-                        Docente identificado desde
-                        el encabezado del PDF.
-                    </div>
-
-                </div>
-
-
-                <!-- CARD ESTUDIANTES -->
-
-                <div class="premium-card">
-
-                    <div class="card-number">
-                        03
-                    </div>
-
-                    <div class="card-icon">
-                        👨‍🎓
-                    </div>
-
-                    <div class="card-label">
-                        ESTUDIANTES
-                    </div>
-
-                    <div class="card-title">
-                        {cantidad}
-                    </div>
-
-                    <div class="card-line"></div>
-
-                    <div class="card-description">
-                        Estudiantes encontrados con
-                        nota entre 5.0 y 5.9.
-                    </div>
-
-                </div>
-
-
-                <!-- CARD PROMEDIO -->
-
-                <div class="premium-card">
-
-                    <div class="card-number">
-                        04
-                    </div>
-
-                    <div class="card-icon">
-                        📊
-                    </div>
-
-                    <div class="card-label">
-                        PROMEDIO
-                    </div>
-
-                    <div class="card-title">
-                        {promedio:.2f}
-                    </div>
-
-                    <div class="card-line"></div>
-
-                    <div class="card-description">
-                        Promedio de las notas
-                        encontradas en el rango.
-                    </div>
-
-                </div>
-
+            <div class="card-label">
+                ASIGNATURA
             </div>
 
-            """, unsafe_allow_html=True)
+            <div class="card-title">
+                {materia}
+            </div>
+
+            <div class="card-line"></div>
+
+            <div class="card-description">
+                Materia encontrada automáticamente
+                en el colector.
+            </div>
+        </div>
+
+
+        <div class="premium-card">
+            <div class="card-number">02</div>
+
+            <div class="card-icon">👨‍🏫</div>
+
+            <div class="card-label">
+                DOCENTE
+            </div>
+
+            <div class="card-title">
+                {docente}
+            </div>
+
+            <div class="card-line"></div>
+
+            <div class="card-description">
+                Docente identificado desde
+                el encabezado del PDF.
+            </div>
+        </div>
+
+
+        <div class="premium-card">
+            <div class="card-number">03</div>
+
+            <div class="card-icon">👨‍🎓</div>
+
+            <div class="card-label">
+                ESTUDIANTES
+            </div>
+
+            <div class="card-title">
+                {cantidad}
+            </div>
+
+            <div class="card-line"></div>
+
+            <div class="card-description">
+                Estudiantes encontrados con
+                nota entre 5.0 y 5.9.
+            </div>
+        </div>
+
+
+        <div class="premium-card">
+            <div class="card-number">04</div>
+
+            <div class="card-icon">📊</div>
+
+            <div class="card-label">
+                PROMEDIO
+            </div>
+
+            <div class="card-title">
+                {promedio:.2f}
+            </div>
+
+            <div class="card-line"></div>
+
+            <div class="card-description">
+                Promedio de las notas
+                encontradas en el rango.
+            </div>
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True
+
 
 
             # =================================================
