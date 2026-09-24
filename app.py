@@ -584,19 +584,27 @@ st.markdown("""
 # CARGAR PDF
 # ============================================================
 
-st.markdown("""
-<div class="upload-card">
+st.markdown(
+    """
+    <div style="
+        text-align:center;
+        padding:25px;
+        margin-bottom:15px;
+        background:white;
+        border-radius:20px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.06);
+    ">
+        <h3 style="margin:0; color:#374151;">
+            📄 Cargar colector de notas
+        </h3>
 
-    <div class="upload-title">
-        📄 Cargar colector de notas
+        <p style="margin:8px 0 0 0; color:#6b7280;">
+            Arrastra tu archivo PDF o selecciónalo desde tu computadora.
+        </p>
     </div>
-
-    <div class="upload-text">
-        Arrastra tu archivo PDF o selecciónalo desde tu computadora.
-    </div>
-
-</div>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 
 archivo_pdf = st.file_uploader(
