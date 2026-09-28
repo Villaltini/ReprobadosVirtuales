@@ -947,9 +947,8 @@ if archivo_pdf is not None:
                 # (nota_final + 6 + faltante) / 2
                 # =================================================
 
-                nota_necesaria = (
-                    nota_final + 6.0 + faltante
-                ) / 2
+                nota_necesaria = 12-  nota_final 
+                 
 
 
                 estudiantes.append({
