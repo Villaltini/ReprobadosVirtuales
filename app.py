@@ -942,14 +942,20 @@ if archivo_pdf is not None:
                 # =================================================
                 # CALCULAR NOTA NECESARIA
                 #
-                # Fórmula solicitada:
+                # Fórmula:
                 #
-                # (nota_final + 6 + faltante) / 2
+                # Nota necesaria = 12 - Nota Final
+                #
+                # Ejemplo:
+                # 5.6 -> 12 - 5.6 = 6.4
                 # =================================================
 
-                nota_necesaria = 12-  nota_final 
-                 
+                nota_necesaria = 12 - nota_final
 
+
+                # =================================================
+                # GUARDAR ESTUDIANTE
+                # =================================================
 
                 estudiantes.append({
 
@@ -963,6 +969,8 @@ if archivo_pdf is not None:
 
                     "Nota Final": nota_final,
 
+                    # Se mantiene internamente para el cálculo,
+                    # pero NO se mostrará en la tabla.
                     "Le falta para 6.0": faltante,
 
                     "Nota necesaria": nota_necesaria
@@ -1158,7 +1166,7 @@ if archivo_pdf is not None:
 
 
             # =====================================================
-            # RENDERIZAR HTML DIRECTAMENTE
+            # RENDERIZAR HTML
             # =====================================================
 
             st.html(cards_html)
@@ -1259,10 +1267,6 @@ if archivo_pdf is not None:
                     estudiante["Nota Final"]
                 )
 
-                faltante = float(
-                    estudiante["Le falta para 6.0"]
-                )
-
                 nota_necesaria = float(
                     estudiante["Nota necesaria"]
                 )
@@ -1302,10 +1306,6 @@ if archivo_pdf is not None:
         </div>
 
         <div class="approval-info">
-
-            
-           
-           
 
             <div class="approval-needed">
 
@@ -1352,15 +1352,35 @@ if archivo_pdf is not None:
 
             df_mostrar = df.copy()
 
+
+            # =====================================================
+            # ELIMINAR COLUMNA "LE FALTA PARA 6.0"
+            #
+            # Se elimina solamente de la tabla y Excel.
+            # El cálculo interno sigue funcionando.
+            # =====================================================
+
+            df_mostrar = df_mostrar.drop(
+                columns=["Le falta para 6.0"]
+            )
+
+
+            # =====================================================
+            # REDONDEAR NOTAS
+            # =====================================================
+
             df_mostrar["Nota Final"] = df_mostrar[
                 "Nota Final"
             ].round(1)
 
-   
             df_mostrar["Nota necesaria"] = df_mostrar[
                 "Nota necesaria"
             ].round(1)
 
+
+            # =====================================================
+            # MOSTRAR TABLA
+            # =====================================================
 
             st.dataframe(
                 df_mostrar,
