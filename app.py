@@ -1171,7 +1171,57 @@ if archivo_pdf is not None:
             # TARJETAS DE ESTUDIANTES
             # =====================================================
 
-students_html += f"""
+```python
+# =====================================================
+# TARJETAS DE ESTUDIANTES
+# =====================================================
+
+students_html = """
+<div class="students-container">
+"""
+
+
+for posicion, (_, estudiante) in enumerate(
+    df.iterrows(),
+    start=1
+):
+
+    carnet = html.escape(
+        str(estudiante["Carnet"])
+    )
+
+    nombre = html.escape(
+        str(estudiante["Nombre"])
+    )
+
+    nota = float(
+        estudiante["Nota Final"]
+    )
+
+
+    # =================================================
+    # CALCULAR CUÁNTO LE FALTA PARA LLEGAR A 6.0
+    # =================================================
+
+    faltante = max(
+        0,
+        6.0 - nota
+    )
+
+
+    # =================================================
+    # CALCULAR NOTA NECESARIA
+    #
+    # Fórmula:
+    # (nota actual + 6 + faltante) / 2
+    # =================================================
+
+    nota_necesaria = (
+        nota + 6.0 + faltante
+    ) / 2
+
+
+    students_html += f"""
     <div class="student-card">
 
         <div class="student-number">
@@ -1210,7 +1260,9 @@ students_html += f"""
             font-weight:700;
         ">
             📈 Le faltan:
-            <strong>{faltante:.1f}</strong>
+            <strong>
+                {faltante:.1f}
+            </strong>
             para llegar a 6.0
         </div>
 
@@ -1229,6 +1281,20 @@ students_html += f"""
 
     </div>
 """
+
+
+students_html += """
+</div>
+"""
+
+
+# =====================================================
+# RENDERIZAR TARJETAS DIRECTAMENTE
+# =====================================================
+
+st.html(students_html)
+```
+
 
 
             # =====================================================
