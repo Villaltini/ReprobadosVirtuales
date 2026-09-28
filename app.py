@@ -1171,30 +1171,7 @@ if archivo_pdf is not None:
             # TARJETAS DE ESTUDIANTES
             # =====================================================
 
-            students_html = """
-<div class="students-container">
-"""
-
-
-            for posicion, (_, estudiante) in enumerate(
-                df.iterrows(),
-                start=1
-            ):
-
-                carnet = html.escape(
-                    str(estudiante["Carnet"])
-                )
-
-                nombre = html.escape(
-                    str(estudiante["Nombre"])
-                )
-
-                nota = float(
-                    estudiante["Nota Final"]
-                )
-
-
-                students_html += f"""
+students_html += f"""
     <div class="student-card">
 
         <div class="student-number">
@@ -1227,12 +1204,30 @@ if archivo_pdf is not None:
             NOTA FINAL
         </div>
 
+        <div style="
+            margin-top:8px;
+            font-size:13px;
+            font-weight:700;
+        ">
+            📈 Le faltan:
+            <strong>{faltante:.1f}</strong>
+            para llegar a 6.0
+        </div>
+
+        <div style="
+            margin-top:8px;
+            padding:10px;
+            border-radius:12px;
+            background:rgba(255,255,255,.15);
+            font-size:13px;
+        ">
+            📝 Necesita sacar:
+            <strong style="font-size:18px;">
+                {nota_necesaria:.1f}
+            </strong>
+        </div>
+
     </div>
-"""
-
-
-            students_html += """
-</div>
 """
 
 
