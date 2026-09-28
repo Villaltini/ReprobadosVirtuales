@@ -1356,10 +1356,7 @@ if archivo_pdf is not None:
                 "Nota Final"
             ].round(1)
 
-            df_mostrar["Le falta para 6.0"] = df_mostrar[
-                "Le falta para 6.0"
-            ].round(1)
-
+   
             df_mostrar["Nota necesaria"] = df_mostrar[
                 "Nota necesaria"
             ].round(1)
