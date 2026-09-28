@@ -325,7 +325,7 @@ header {
 
     overflow: hidden;
 
-    min-height: 235px;
+    min-height: 310px;
 
     padding: 24px;
 
@@ -477,6 +477,48 @@ header {
 
 
 /* ==============================
+   INFORMACIÓN DE APROBACIÓN
+   ============================== */
+
+.approval-info {
+    margin-top: 12px;
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.12);
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.approval-needed {
+    margin-top: 6px;
+
+    padding: 8px;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.18);
+
+    text-align: center;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.approval-needed strong {
+    font-size: 19px;
+}
+
+
+/* ==============================
    TABLA
    ============================== */
 
@@ -584,9 +626,7 @@ st.html("""
 # CARGAR PDF
 # ============================================================
 
-st.markdown(
-    "### 📄 Cargar colector de notas"
-)
+st.markdown("### 📄 Cargar colector de notas")
 
 st.caption(
     "Arrastra tu archivo PDF o selecciónalo desde tu computadora."
@@ -644,10 +684,7 @@ if archivo_pdf is not None:
 
                     if ":" in linea_limpia:
 
-                        partes = linea_limpia.split(
-                            ":",
-                            1
-                        )
+                        partes = linea_limpia.split(":", 1)
 
                         if len(partes) > 1:
 
@@ -668,10 +705,7 @@ if archivo_pdf is not None:
 
                     if ":" in linea_limpia:
 
-                        partes = linea_limpia.split(
-                            ":",
-                            1
-                        )
+                        partes = linea_limpia.split(":", 1)
 
                         if len(partes) > 1:
 
@@ -799,7 +833,7 @@ if archivo_pdf is not None:
                         if 0 <= valor <= 10:
                             notas.append(valor)
 
-                    except:
+                    except ValueError:
 
                         pass
 
@@ -895,12 +929,45 @@ if archivo_pdf is not None:
                     nombre = "Estudiante"
 
 
+                # =================================================
+                # CALCULAR CUÁNTO LE FALTA PARA 6.0
+                # =================================================
+
+                faltante = max(
+                    0,
+                    6.0 - nota_final
+                )
+
+
+                # =================================================
+                # CALCULAR NOTA NECESARIA
+                #
+                # Fórmula solicitada:
+                #
+                # (nota_final + 6 + faltante) / 2
+                # =================================================
+
+                nota_necesaria = (
+                    nota_final + 6.0 + faltante
+                ) / 2
+
+
                 estudiantes.append({
+
                     "Materia": materia,
+
                     "Docente": docente,
+
                     "Carnet": carnet,
+
                     "Nombre": nombre,
-                    "Nota Final": nota_final
+
+                    "Nota Final": nota_final,
+
+                    "Le falta para 6.0": faltante,
+
+                    "Nota necesaria": nota_necesaria
+
                 })
 
 
@@ -930,7 +997,7 @@ if archivo_pdf is not None:
 
             df = df.drop_duplicates(
                 subset=["Carnet"]
-            )
+            ).reset_index(drop=True)
 
 
             # =====================================================
@@ -1171,57 +1238,38 @@ if archivo_pdf is not None:
             # TARJETAS DE ESTUDIANTES
             # =====================================================
 
- 
-# =====================================================
-# TARJETAS DE ESTUDIANTES
-# =====================================================
-
-students_html = """
+            students_html = """
 <div class="students-container">
 """
 
 
-for posicion, (_, estudiante) in enumerate(
-    df.iterrows(),
-    start=1
-):
+            for posicion, (_, estudiante) in enumerate(
+                df.iterrows(),
+                start=1
+            ):
 
-    carnet = html.escape(
-        str(estudiante["Carnet"])
-    )
+                carnet = html.escape(
+                    str(estudiante["Carnet"])
+                )
 
-    nombre = html.escape(
-        str(estudiante["Nombre"])
-    )
+                nombre = html.escape(
+                    str(estudiante["Nombre"])
+                )
 
-    nota = float(
-        estudiante["Nota Final"]
-    )
+                nota = float(
+                    estudiante["Nota Final"]
+                )
 
+                faltante = float(
+                    estudiante["Le falta para 6.0"]
+                )
 
-    # =================================================
-    # CALCULAR CUÁNTO LE FALTA PARA LLEGAR A 6.0
-    # =================================================
-
-    faltante = max(
-        0,
-        6.0 - nota
-    )
+                nota_necesaria = float(
+                    estudiante["Nota necesaria"]
+                )
 
 
-    # =================================================
-    # CALCULAR NOTA NECESARIA
-    #
-    # Fórmula:
-    # (nota actual + 6 + faltante) / 2
-    # =================================================
-
-    nota_necesaria = (
-        nota + 6.0 + faltante
-    ) / 2
-
-
-    students_html += f"""
+                students_html += f"""
     <div class="student-card">
 
         <div class="student-number">
@@ -1254,46 +1302,37 @@ for posicion, (_, estudiante) in enumerate(
             NOTA FINAL
         </div>
 
-        <div style="
-            margin-top:8px;
-            font-size:13px;
-            font-weight:700;
-        ">
-            📈 Le faltan:
+        <div class="approval-info">
+
+            📉 Le faltan
             <strong>
                 {faltante:.1f}
             </strong>
-            para llegar a 6.0
-        </div>
+            puntos para llegar a 6.0.
 
-        <div style="
-            margin-top:8px;
-            padding:10px;
-            border-radius:12px;
-            background:rgba(255,255,255,.15);
-            font-size:13px;
-        ">
-            📝 Necesita sacar:
-            <strong style="font-size:18px;">
-                {nota_necesaria:.1f}
-            </strong>
+            <div class="approval-needed">
+
+                📝 Nota necesaria:
+
+                <strong>
+                    {nota_necesaria:.1f}
+                </strong>
+
+            </div>
+
         </div>
 
     </div>
 """
 
 
-students_html += """
+            students_html += """
 </div>
 """
 
 
- 
-
-
-
             # =====================================================
-            # RENDERIZAR TARJETAS DIRECTAMENTE
+            # RENDERIZAR TARJETAS
             # =====================================================
 
             st.html(students_html)
@@ -1310,8 +1349,27 @@ students_html += """
             """)
 
 
+            # =====================================================
+            # COPIA PARA MOSTRAR
+            # =====================================================
+
+            df_mostrar = df.copy()
+
+            df_mostrar["Nota Final"] = df_mostrar[
+                "Nota Final"
+            ].round(1)
+
+            df_mostrar["Le falta para 6.0"] = df_mostrar[
+                "Le falta para 6.0"
+            ].round(1)
+
+            df_mostrar["Nota necesaria"] = df_mostrar[
+                "Nota necesaria"
+            ].round(1)
+
+
             st.dataframe(
-                df,
+                df_mostrar,
                 use_container_width=True,
                 hide_index=True
             )
@@ -1329,7 +1387,7 @@ students_html += """
                 engine="openpyxl"
             ) as writer:
 
-                df.to_excel(
+                df_mostrar.to_excel(
                     writer,
                     index=False,
                     sheet_name="Estudiantes"
@@ -1340,7 +1398,7 @@ students_html += """
 
 
             # =====================================================
-            # DESCARGAR
+            # DESCARGAR EXCEL
             # =====================================================
 
             st.download_button(
