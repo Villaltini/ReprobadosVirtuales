@@ -1303,11 +1303,9 @@ if archivo_pdf is not None:
 
         <div class="approval-info">
 
-            📉 Le faltan
-            <strong>
-                {faltante:.1f}
-            </strong>
-            puntos para llegar a 6.0.
+            
+           
+           
 
             <div class="approval-needed">
 
